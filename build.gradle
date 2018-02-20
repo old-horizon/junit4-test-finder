@@ -1,0 +1,16 @@
+apply plugin: 'java-library'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    api 'junit:junit:4.12'
+}
