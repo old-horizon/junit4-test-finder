@@ -11,7 +11,6 @@ import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,7 +27,7 @@ class TestClassProcessor {
         jUnit3TestClass = elementUtils.getTypeElement(TestCase.class.getName()).asType();
     }
 
-    void process(final TypeElement clazz, final ServiceLoader<JUnit4TestFoundListener> listeners) {
+    void process(final TypeElement clazz, final JUnit4TestFoundListener listeners) {
         final Predicate<ExecutableElement> testMethodPredicate = isJUnit3TestClass(clazz) ?
                 TestClassProcessor::isJUnit3TestMethod : TestClassProcessor::isJUnit4TestMethod;
         getAllMethods(clazz).stream()
@@ -61,10 +60,10 @@ class TestClassProcessor {
     }
 
     private static void invokeListeners(final TypeElement clazz, final ExecutableElement method,
-                                        final ServiceLoader<JUnit4TestFoundListener> listeners) {
+                                        final JUnit4TestFoundListener listeners) {
         final String className = clazz.getQualifiedName().toString();
         final String methodName = method.getSimpleName().toString();
-        listeners.forEach(listener -> listener.testFound(className, methodName));
+        listeners.testFound(className, methodName);
     }
 
 }
